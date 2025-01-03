@@ -8,13 +8,17 @@ import {
   USER_SIGNUP_LOADING,
   USER_SIGNUP_SUCCESS,
   USER_SIGNUP_FAILURE,
+  SESSION_LOADING,
+  SESSION_SUCCESS,
+  SESSION_FAILURE,
 } from "../types/types";
 
 const initialState = {
   loading: false,
   isLogin: {},
   myProfile: {},
-  signUp:{},
+  signUp: {},
+  session: {},
 };
 const loginReducer = (state = initialState, action) => {
   // console.log("hello loginReducer called", action.payload)
@@ -58,27 +62,45 @@ const loginReducer = (state = initialState, action) => {
         myProfile: [],
         error: action,
       };
-      case USER_SIGNUP_LOADING:
-        return {
-          ...state,
-          loading: true,
-        };
-      case USER_SIGNUP_SUCCESS:
-        return {
-          ...state,
-          loading: false,
-          signUp: action.payload,
-          error: {},
-        };
-      case USER_SIGNUP_FAILURE:
-        return {
-          ...state,
-          loading: false,
-          signUp: [],
-          error: action,
-        };
-  
-
+    case USER_SIGNUP_LOADING:
+      return {
+        ...state,
+        loading: true,
+      };
+    case USER_SIGNUP_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        signUp: action.payload,
+        error: {},
+      };
+    case USER_SIGNUP_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        signUp: [],
+        error: action,
+      };
+    case SESSION_LOADING:
+      return {
+        ...state,
+        loading: true,
+        session: action.payload,
+      };
+    case SESSION_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        session: action.payload,
+        error: {},
+      };
+    case SESSION_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        session: [],
+        error: action,
+      };
     default:
       return state;
   }

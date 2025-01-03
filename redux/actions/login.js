@@ -8,6 +8,10 @@ import {
  USER_SIGNUP_LOADING,
  USER_SIGNUP_SUCCESS,
  USER_SIGNUP_FAILURE,
+
+ SESSION_LOADING,
+ SESSION_SUCCESS,
+ SESSION_FAILURE,
 } from "../types/types";
 
 import { client } from "../../utils/axios";
@@ -71,6 +75,29 @@ export const userSignUpFailure = (error) => {
   };
 };
 
+
+
+
+
+export const sessionLoading = (error) => {
+  return {
+    type: SESSION_LOADING,
+    payload: error,
+  };
+};
+export const sessionSuccess = (data) => {
+  return {
+    type: SESSION_SUCCESS,
+    payload: data,
+  };
+};
+export const sessionFailure = (error) => {
+  return {
+    type: SESSION_FAILURE,
+    payload: error,
+  };
+};
+
 export const userLoginApi = (data) => {
   // console.log("hello  userLoginApi called",data)
   return (dispatch) => {
@@ -114,6 +141,7 @@ export const myProfileApi = () => {
           "<<<<<<<<<<<<<<<<<<My Profile>>>>>>>>>>>>>>>>>>>>>>>",
           response
         );
+       
         dispatch(
           myProfile(
             response?.data,
@@ -157,6 +185,46 @@ export const signUpApis = (data) => {
         );
         dispatch(
           userSignUpFailure(
+            err,
+            "Something went wrong",
+            " "
+          )
+        );
+      });
+  };
+};
+
+
+
+export const sessionUpdateApi = (userid) => {
+  const data = {
+    userid: userid,
+  };
+  return (dispatch) => {
+    dispatch(sessionLoading("STATUS"));
+    client
+      .post("/api/login/sessionUpdate", data)
+      .then((response) => {
+        // console.log("rrrrrr", response);
+        if (response) {
+          dispatch(
+            sessionSuccess(
+              response?.data,
+              " status Successfully",
+              "status UPDATE"
+            )
+          );
+          
+        }
+      })
+      .catch((err) => {
+        toast.error(" session failed!!!");
+        console.log(
+          "error caught in -> actions/social/getFindFriend.",
+          err
+        );
+        dispatch(
+          sessionFailure(
             err,
             "Something went wrong",
             " "

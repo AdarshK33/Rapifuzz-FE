@@ -4,7 +4,12 @@
 import React, { useEffect } from 'react';
 import { Avatar, Box, Typography, Grid, Button } from '@mui/material';
 import { useDispatch, useSelector } from "react-redux";
-import { getStoryApi } from '../../../redux/actions/social';
+import { getStoryApi, profileUploadApi } from '../../../redux/actions/social';
+import {  IconButton } from "@mui/material";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import Dropzone from "react-dropzone";
+import { Image } from 'react-feather';
+import { sessionUpdateApi } from '../../../redux/actions/login';
 
 const ProfileDashBoard = () => {
   const dispatch = useDispatch();
@@ -54,6 +59,26 @@ const ProfileDashBoard = () => {
   
 }, [myProfile]);
 
+useEffect(() => {
+ 
+dispatch(sessionUpdateApi(myProfile?.user_id));
+
+}, [myProfile]);
+
+  // Handle file input change
+  const onDrop = async (acceptedFiles) => {
+    const formData = new FormData();
+    acceptedFiles.forEach((file) => {
+      formData.append("profile_pic_file", file);
+    });
+    formData.append("id", myProfile?.user_id);
+
+    dispatch(profileUploadApi(formData));
+
+   
+  };
+
+
 console.log(getStoryPost,"getStoryPost")
   return (
     <Grid container justifyContent="center" sx={{ marginTop: 4 }}>
@@ -81,6 +106,48 @@ console.log(getStoryPost,"getStoryPost")
                 border: '2px solid #DEA3B7',
               }}
             />
+             <IconButton
+      color="primary"
+      component="label"
+      sx={{
+        position: "relative",
+        bottom: 0,
+        right: 0,
+        backgroundColor: "red",
+        boxShadow: 2,
+        "&:hover": {
+          backgroundColor: "#f0f0f0",
+        },
+      }}
+    >
+      <CameraAltIcon />
+      <Box className="dropZone-container">
+                <Dropzone
+                  onDrop={onDrop}
+                // accept={{ "image/*": [".png", ".jpg", ".jpeg"] }}
+                >
+                  {({ getRootProps, getInputProps }) => (
+                    <Box
+                      {...getRootProps()}
+                      className="dropzone col-2 p-3 text-end align-self-center d-flex"
+                    >
+                      <input {...getInputProps()} />
+                      { }
+                      <Box
+                        // className={`${styles.upload_placeholder} upload_blk`}
+                      >
+                      
+                        {/* <label htmlFor="upload-image">
+          <Button variant="outlined" component="span" fullWidth>
+            Upload Image
+          </Button>
+        </label> */}
+                      </Box>
+                    </Box>
+                  )}
+                </Dropzone>
+              </Box>
+    </IconButton>
           </Grid>
 
           {/* Stats */}

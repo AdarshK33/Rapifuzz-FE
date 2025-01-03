@@ -22,7 +22,7 @@ console.log(body,"bbbbbb")
             ...response.data.user, //user detaisl and token
           },
           loggedIn: true,
-        };
+   };
         // console.log("hello 1")
 
         await req.session.save();

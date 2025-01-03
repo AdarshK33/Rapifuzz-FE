@@ -6,21 +6,23 @@ import {
   GET_STORY_LOADING,
   GET_STORY_SUCCESS,
   GET_STORY_FAILURE,
-  
   POST_STORY_UPLOAD_LOADING,
-POST_STORY_UPLOAD_SUCCESS,
-POST_STORY_UPLOAD_FAILURE
+  POST_STORY_UPLOAD_SUCCESS,
+  POST_STORY_UPLOAD_FAILURE,
+  PROFILE_UPLOAD_LOADING,
+  PROFILE_UPLOAD_SUCCESS,
+  PROFILE_UPLOAD_FAILURE,
 } from "../types/types";
 
 const initialState = {
   loading: false,
   findFriend: {},
-  getStoryPost:{},
-  uploadStoryPost:{}
-
+  getStoryPost: {},
+  uploadStoryPost: {},
+  uploadProfile:{},
 };
 const socialReducer = (state = initialState, action) => {
-  console.log("hello loginReducer called", action);
+  
   switch (action.type) {
     case FIND_FRIEND_LOADING:
       return {
@@ -64,7 +66,7 @@ const socialReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
-        uploadStoryPost: action.payload
+        uploadStoryPost: action.payload,
       };
     case POST_STORY_UPLOAD_SUCCESS:
       return {
@@ -74,13 +76,34 @@ const socialReducer = (state = initialState, action) => {
         error: {},
       };
     case POST_STORY_UPLOAD_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        uploadStoryPost: [],
+        error: action,
+      };
+    case PROFILE_UPLOAD_LOADING:
+      return {
+        ...state,
+        loading: true,
+        uploadProfile: action.payload,
+      };
+    case PROFILE_UPLOAD_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        uploadProfile: action.payload,
+        error: {},
+      };
+    case PROFILE_UPLOAD_FAILURE:
         return {
           ...state,
           loading: false,
-          uploadStoryPost: [],
+          uploadProfile: [],
           error: action,
         };
-    default:
+    
+      default:
       return state;
   }
 };

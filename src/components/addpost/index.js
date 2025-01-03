@@ -25,24 +25,7 @@ const AddPost = () => {
 
     dispatch(storyPostUploadApi(formData));
 
-    // axios
-    //   .post(
-    //     `${process.env.CATALOG_NEW_SERVICE_URL}/catalog/media/${selectItemId}`,
-    //     ś,
-    //     {
-    //       headers: {
-    //         Accept: "*/*",
-    //         "Content-Type": "multipart/form-data",
-    //         Authorization: `Bearer ${at}`,
-    //       },
-    //     }
-    //   )
-    //   .then((response) => {
-    //     toast.info("media file uploaded Successfully !!!");
-    //   })
-    //   .catch((error) => {
-    //     toast.error("media file upload Failed !!!");
-    //   });
+
   };
 
   // Handle caption input

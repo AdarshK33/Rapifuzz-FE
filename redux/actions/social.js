@@ -7,11 +7,15 @@ import {
     GET_STORY_FAILURE,
     POST_STORY_UPLOAD_LOADING,
     POST_STORY_UPLOAD_SUCCESS,
-    POST_STORY_UPLOAD_FAILURE
+    POST_STORY_UPLOAD_FAILURE,
+    PROFILE_UPLOAD_LOADING,
+    PROFILE_UPLOAD_SUCCESS,
+    PROFILE_UPLOAD_FAILURE,
   } from "../types/types";
   
   import { client,uploadClient } from "../../utils/axios";
   import { toast } from "react-toastify";
+import { sessionUpdate, sessionUpdateApi } from "./login";
   
  
   
@@ -68,6 +72,27 @@ import {
   export const storyPostUploadFailure = (error) => {
     return {
       type: POST_STORY_UPLOAD_FAILURE,
+      payload: error,
+    };
+  };
+   
+
+     
+  export const  profileUploadLoading = (status) => {
+    return {
+      type:  PROFILE_UPLOAD_LOADING,
+      payload: status,
+    };
+  };
+  export const  profileUploadSuccess = (data) => {
+    return {
+      type: PROFILE_UPLOAD_SUCCESS,
+      payload: data,
+    };
+  };
+  export const profileUploadFailure = (error) => {
+    return {
+      type: PROFILE_UPLOAD_FAILURE,
       payload: error,
     };
   };
@@ -179,6 +204,39 @@ import {
           );
           dispatch(
             storyPostUploadFailure(err, "Something went wrong", "storyPostUploadApi")
+             );
+        });
+    };
+  };
+
+
+  
+  export const profileUploadApi = (data) => {
+    
+    return (dispatch) => {
+      dispatch(profileUploadLoading("UPLOAD"));
+     // console.log( dispatch(storyPostUploadLoading("UPLOAD")),"hhhhhhhhhh")
+      uploadClient
+        .post("/api/socialApi/profileUpload", data)
+        .then((response) => {
+          toast.info("Profile uploaded successfully !!!");
+          
+         
+        dispatch(
+          profileUploadSuccess(
+              "Post Upload Successfully",
+              "Post Upload ",
+              response
+            )
+          ); // } else throw new Error("");
+        })
+        .catch((err) => {
+          console.log(
+            "error caught in -> actions/socialApi/profileUploadApi",
+            err
+          );
+          dispatch(
+            profileUploadFailure(err, "Something went wrong", "profileUploadApi")
              );
         });
     };

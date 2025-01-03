@@ -16,7 +16,7 @@ export default index;
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
     try {
-      const user = req?.session?.user || null;
+      const user = req?.session?.user ;
       if (!user) {
         return {
           redirect: {
