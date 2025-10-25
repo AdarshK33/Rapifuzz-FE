@@ -10,7 +10,6 @@ export const sessionOption = {
   },
 };
 
-// console.log("SOCAILSESSION", process.env.SOCAILSESSION);
 
 export default function withSession(route) {
   return withIronSessionApiRoute(route, sessionOption);

@@ -7,7 +7,6 @@ const uploadClient = axios.create({
     "Content-Type": "multipart/form-data",
   },
 });
-
 const client = axios.create({
   // timeout: 1000 * 20,
   headers: {

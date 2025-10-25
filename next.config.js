@@ -10,7 +10,6 @@ const {
 module.exports = {
   reactStrictMode: true,
   env: {
-  
     BASE_SERVICE_URL,
     SOCAILSESSION,
     SOCAILSESSION_COOKIE_PASSWORD,
