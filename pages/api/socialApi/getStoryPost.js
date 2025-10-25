@@ -7,10 +7,16 @@ function handler(req, res) {
 
   const body = req.body;
   const id = body.userid
+  const search = body.search
+  const page = body.page
+
+
+
+  // http://localhost:8000/api/story/story-data/7?search=&page=2&limit=10
  // console.log("iiiiiiiiii",id)
   const config = {
     method: "get",
-    url: `/story/story-data/${id}`,
+    url: `/story/story-data/${id}?search=${search}&page=${page}&limit=10`,
     headers: {
        Authorization: `Bearer ${token}`,
     },

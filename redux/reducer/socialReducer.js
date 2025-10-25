@@ -24,26 +24,7 @@ const initialState = {
 const socialReducer = (state = initialState, action) => {
   
   switch (action.type) {
-    case FIND_FRIEND_LOADING:
-      return {
-        ...state,
-        loading: true,
-      };
-    case FIND_FRIEND_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        findFriend: action.payload,
-        error: {},
-      };
-    case FIND_FRIEND_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        findFriend: [],
-        error: action,
-      };
-    case GET_STORY_LOADING:
+  case GET_STORY_LOADING:
       return {
         ...state,
         loading: true,

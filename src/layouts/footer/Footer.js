@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <Box sx={{ p: 3, textAlign: "center" }}>
       <Typography>
-        © 2024 All rights reserved by{" "}
+        © 2025 All rights reserved by{" "}
         <Link href="#">
           <a>adarsh</a>
         </Link>{" "}

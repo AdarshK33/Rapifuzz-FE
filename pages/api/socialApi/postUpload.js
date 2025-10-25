@@ -67,6 +67,7 @@ const handler = async (req, res) => {
       .then((response) => {
         // console.log(response, "res here");
         res.status(200).json(response.data);
+        
       })
       .catch((err) => {
         console.log(

@@ -96,7 +96,7 @@ const Forms = () => {
   return (
     <Grid container spacing={0}>
       <Grid item xs={12} lg={12}>
-        <BaseCard title="Social web">
+        <BaseCard title="Rapifuzz">
           <form onSubmit={handleSubmit}>
             <Stack spacing={3}>
               <TextField

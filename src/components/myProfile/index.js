@@ -1,16 +1,17 @@
 
 
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Avatar, Box, Typography, Grid, Button } from '@mui/material';
 import { useDispatch, useSelector } from "react-redux";
-import { getStoryApi, profileUploadApi } from '../../../redux/actions/social';
+import { getStoryApi, profileUploadApi, storyPostUploadApi } from '../../../redux/actions/social';
 import {  IconButton } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import Dropzone from "react-dropzone";
 import { Image } from 'react-feather';
 import { sessionUpdateApi } from '../../../redux/actions/login';
-
+import Pagination from 'react-js-pagination';
+import { Edit2, Eye, Search, Download } from "react-feather";
 const ProfileDashBoard = () => {
   const dispatch = useDispatch();
   // Static friend data
@@ -20,7 +21,11 @@ const ProfileDashBoard = () => {
   const { getStoryPost } = useSelector((state) => {
     return state.socialReducer;
   });
-  
+
+   const [focus, setFocus] = useState(false)
+  const [borderFocus, setBorderFocus] = useState(false)
+
+    const [currentPage, setCurrentPage] = useState(1);
 
   // getStoryApi
   const user = {
@@ -59,11 +64,11 @@ const ProfileDashBoard = () => {
   
 }, [myProfile]);
 
-useEffect(() => {
+// useEffect(() => {
  
-dispatch(sessionUpdateApi(myProfile?.user_id));
+// dispatch(sessionUpdateApi(myProfile?.user_id));
 
-}, [myProfile]);
+// }, [myProfile]);
 
   // Handle file input change
   const onDrop = async (acceptedFiles) => {
@@ -71,15 +76,62 @@ dispatch(sessionUpdateApi(myProfile?.user_id));
     acceptedFiles.forEach((file) => {
       formData.append("profile_pic_file", file);
     });
-    formData.append("id", myProfile?.user_id);
+    formData.append("id", myProfile?.id);
 
-    dispatch(profileUploadApi(formData));
+    dispatch(storyPostUploadApi(formData));
 
-   
   };
 
+  
+  //   /*-----------------Pagination------------------*/
 
-console.log(getStoryPost,"getStoryPost")
+  const recordPerPage = 10;
+  const totalRecords = getStoryPost?.total;
+  const pageRange = 10;
+  const indexOfLastRecord = currentPage * recordPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordPerPage;
+  const currentRecords =getStoryPost?.data;
+console.log("indexOfLastRecord",indexOfLastRecord)
+  const handlePaginationChange = (value) => {
+    setCurrentPage(value);
+    dispatch(getStoryApi(myProfile?.id,value-1));
+    
+  };
+
+  /*-----------------Pagination------------------*/
+
+// console.log(getStoryPost,"getStoryPost")
+
+ const searchHandler = (e, value) => {
+    // console.log(value?.itemId, "hello e.target.value");
+    setSearchKeyValue(value?.itemId);
+  };
+
+  const handleFocus = (e) => {
+    setFocus(true)
+    setBorderFocus(true)
+  }
+  const handleFocusOut = (e) => {
+    if (e.target.value === "") setFocus(false)
+    setBorderFocus(false)
+  }
+
+  const getSearchKey = (e) => {
+    console.log(e, "hello e.target.value")
+
+      if (e.length >= 3) {
+      console.log(e, "hello 1 search")
+       setCurrentPage(0);
+       dispatch(getStoryApi(myProfile?.id,0,e));
+    }
+    else if (e.length == 0) {
+        setCurrentPage(0);
+      console.log(e, "hello 2 search")
+     dispatch(getStoryApi(myProfile?.id));
+
+    }
+
+  }
   return (
     <Grid container justifyContent="center" sx={{ marginTop: 4 }}>
       <Box
@@ -96,16 +148,7 @@ console.log(getStoryPost,"getStoryPost")
         <Grid container alignItems="center" spacing={2}>
           {/* Avatar */}
           <Grid item xs={4} sx={{ textAlign: "center" }}>
-            <Avatar
-              src={myProfile?.avatar}
-              alt={myProfile?.name}
-              sx={{
-                width: 120,
-                height: 120,
-                margin: '0 auto',
-                border: '2px solid #DEA3B7',
-              }}
-            />
+          
              <IconButton
       color="primary"
       component="label"
@@ -137,11 +180,9 @@ console.log(getStoryPost,"getStoryPost")
                         // className={`${styles.upload_placeholder} upload_blk`}
                       >
                       
-                        {/* <label htmlFor="upload-image">
-          <Button variant="outlined" component="span" fullWidth>
-            Upload Image
-          </Button>
-        </label> */}
+                 <span style={{ marginTop: 8, fontWeight: 500 }}>
+              Upload Image
+            </span>
                       </Box>
                     </Box>
                   )}
@@ -150,71 +191,34 @@ console.log(getStoryPost,"getStoryPost")
     </IconButton>
           </Grid>
 
-          {/* Stats */}
-          <Grid item xs={8}>
-            <Grid container justifyContent="space-around" alignItems="center">
-              <Box textAlign="center">
-                <Typography variant="h6">{getStoryPost?.data?.length}</Typography>
-                <Typography variant="caption" color="textSecondary">
-                  Posts
-                </Typography>
-              </Box>
-              <Box textAlign="center">
-                <Typography variant="h6">{myProfile?.followers??0}</Typography>
-                <Typography variant="caption" color="textSecondary">
-                  Followers
-                </Typography>
-              </Box>
-              <Box textAlign="center">
-                <Typography variant="h6">{myProfile?.following??0}</Typography>
-                <Typography variant="caption" color="textSecondary">
-                  Following
-                </Typography>
-              </Box>
-            </Grid>
-          </Grid>
+      
+              <div className="search_custom_container">
+                <div className="search_custom_textField" style={borderFocus ? { border: "2px solid  #419794" } : { border: "1px solid #C2C2C2" }}>
+
+                  <Search
+
+                    className="search-icon_attribute mr-1"
+                    style={{ color: "#313131", cursor: "pointer" }}
+
+                  />
+                  <p className={focus ? 'search_custom_focusp' : 'search_custom_nonfocusp'} style={borderFocus ? { color: "#419794" } : { color: "#C2C2C2" }}>Search</p>
+                  <input type="text" name="search" onFocus={handleFocus} onBlur={handleFocusOut} onChange={e => getSearchKey(e.target.value)} autocomplete="off" />
+                </div>
+              </div>
         </Grid>
 
-        {/* User Info Section */}
-        <Box sx={{ marginTop: 3, textAlign: 'center' }}>
-          <Typography variant="h5">{myProfile?.name}</Typography>
-          <Typography variant="subtitle1" color="textSecondary">
-            @{myProfile?.userName}
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            {myProfile?.city ?? "INDIA"}
-          </Typography>
-          <Typography
-            variant="body2"
-            sx={{
-              color: myProfile?.status === "Active" ? "green" : "red",
-              marginTop: 1,
-            }}
-          >
-            Online: {myProfile?.status}
-          </Typography>
-        </Box>
+    
 
-        {/* Follow Button */}
-        {/* <Button
-          variant="contained"
-          sx={{
-            marginTop: 3,
-            width: "100%",
-            backgroundColor: "#DEA3B7",
-          }}
-        >
-          Follow
-        </Button> */}
+      
 
         {/* Posts Section */}
         <Box sx={{ marginTop: 4 }}>
           <Typography variant="h6" sx={{ marginBottom: 2 }}>
-            Posts
+            Photos
           </Typography>
           <Grid container spacing={2}>
             
-            {getStoryPost?.data&&getStoryPost?.data.map((post,index) => (
+            { currentRecords&& currentRecords.map((post,index) => (
               
               <Grid item xs={4} key={index}>
                 <Box
@@ -233,6 +237,19 @@ console.log(getStoryPost,"getStoryPost")
             ))}
           </Grid>
         </Box>
+        <div className="photoPagination">
+                <Pagination
+                  itemClass="page-item"
+                  linkClass="page-link"
+                  activePage={currentPage}
+                  itemsCountPerPage={recordPerPage}
+                  totalItemsCount={totalRecords}
+                  pageRangeDisplayed={pageRange}
+                  firstPageText="First"
+                  lastPageText="Last"
+                  onChange={handlePaginationChange}
+                />
+        </div>
       </Box>
     </Grid>
   );

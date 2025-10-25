@@ -64,6 +64,7 @@ const Login = (user) => {
   };
 
   const submitHandler = () => {
+   
     if (username === "" || password === "") {
       toast.error("Please enter UserName and Password");
     } else {
@@ -101,7 +102,7 @@ const Login = (user) => {
     <Box className={styles.mainContainer}>
   <Box className={styles.leftSection}>
     <Typography variant="h2" sx={{ textAlign: "center" }}>
-      Welcome to Social Web App
+      Welcome to Rapifuzz
     </Typography>
   </Box>
   <Box className={styles.rightSection}>

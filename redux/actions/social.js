@@ -16,6 +16,7 @@ import {
   import { client,uploadClient } from "../../utils/axios";
   import { toast } from "react-toastify";
 import { sessionUpdate, sessionUpdateApi } from "./login";
+import { Search } from "react-feather";
   
  
   
@@ -102,48 +103,13 @@ import { sessionUpdate, sessionUpdateApi } from "./login";
 
 
 
-  export const getFindFriend = (userid) => {
-    const data = {
-      userid: userid,
-    };
-    return (dispatch) => {
-      dispatch(findFriendLoading("STATUS....", "STATUS"));
-      client
-        .post("/api/socialApi/findFriend", data)
-        .then((response) => {
-          // console.log("rrrrrr", response);
-          if (response) {
-            dispatch(
-              findFriendSuccess(
-                response?.data,
-                " status Successfully",
-                "status UPDATE"
-              )
-            );
-            
-          }
-        })
-        .catch((err) => {
-          toast.error(" findFriend failed!!!");
-          console.log(
-            "error caught in -> actions/social/getFindFriend.",
-            err
-          );
-          dispatch(
-            findFriendFailure(
-              err,
-              "Something went wrong",
-              " "
-            )
-          );
-        });
-    };
-  };
 
 
-  export const getStoryApi = (userid) => {
+  export const getStoryApi = (userid,page, search) => {
     const data = {
       userid: userid,
+      page: page,
+       search: search??""
     };
     return (dispatch) => {
       dispatch(getStoryLoading("STATUS....", "STATUS"));
@@ -163,9 +129,9 @@ import { sessionUpdate, sessionUpdateApi } from "./login";
           }
         })
         .catch((err) => {
-          toast.error(" findFriend failed!!!");
+          toast.error(" Photos failed!!!");
           console.log(
-            "error caught in -> actions/social/getFindFriend.",
+            "error caught in -> actions/social/",
             err
           );
           dispatch(
